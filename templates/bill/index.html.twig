@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facture n°{{ order.id }}</title>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300|Raleway:200,300" rel="stylesheet" type="text/css">
+    <style>
+        /* --- Reset & Global Styles --- */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Raleway', sans-serif;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            color: #444;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2 {
+            font-weight: 200;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table th, .table td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        .table img {
+            width: 80px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .section-title {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #555;
+            text-decoration: underline;
+        }
+
+        .flex {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .flex .bloc {
+            flex: 1;
+        }
+
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 40px;
+        }
+
+        /* Button Style */
+        .print-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .print-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Facture n°{{ order.id }}</h1>
+        <h2>{{ order.firstName }} {{ order.lastName }} - {{ order.city.name }}</h2>
+    </header>
+    
+    <div class="flex">
+        <div class="bloc">
+            <h3 class="section-title">Informations du client</h3>
+            <table class="table">
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ order.firstName }}</td>
+                </tr>
+                <tr>
+                    <th>Prénom</th>
+                    <td>{{ order.lastName }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone</th>
+                    <td>{{ order.phone }}</td>
+                </tr>
+                <tr>
+                    <th>Adresse</th>
+                    <td>{{ order.adresse }}</td>
+                </tr>
+                <tr>
+                    <th>Ville</th>
+                    <td>{{ order.city.name }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="bloc">
+            <h3 class="section-title">Détails de la commande</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix unitaire</th>
+                        <th>Quantité</th>
+                        <th>Prix total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in order.orderProducts %}
+                        <tr>
+                            <td>{{ product.product.name }}</td>
+                            <td>{{ product.product.price }} dinars</td>
+                            <td>1</td>
+                            <td>{{ product.product.price }} dinars</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="total">
+        <p>Frais de livraison: {{ order.city.shippingCost }} dinars</p>
+        <hr>
+        <p>Total à payer: 
+            {{ order.totalPrice + order.city.shippingCost }} dinars
+        </p>
+    </div>
+
+    <button class="print-btn" onclick="window.print();">Imprimer la facture</button>
+
+    <footer>
+        <p>Galérie: <a>Art House</a></p>
+    </footer>
+</div>
+
+</body>
+</html>
